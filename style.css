@@ -16,9 +16,19 @@ body {
 	width: 100%;
 
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr;
+	grid-template-rows: 1fr 1fr;
+
 	gap: 2rem;
 }
+
+@media (min-width: 768px) {
+	#wrapper {
+	grid-template-columns: 1fr 1fr;
+		grid-template-rows: 1fr;
+	}
+}
+
 
 #counts-wrapper {
 	display: flex;
@@ -46,4 +56,5 @@ textarea {
 	outline: none;
 	border: none;
 	border-right: 1px solid rgba(0, 0, 0, 0.5);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.5);
 }
