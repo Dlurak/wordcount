@@ -39,6 +39,8 @@ function countChars(string) {
  * @param {string} string
  */
 function countWords(string) {
+  if (!string) return 0;
+
   const withoutMultipleSpaces = string.replace(/\s+/g, " ").trim();
   return withoutMultipleSpaces.split(" ").length;
 }
@@ -50,6 +52,8 @@ function countWords(string) {
  * @param {string} string
  */
 function countLines(string) {
+  if (!string) return 0;
+
   return string.split("\n").length;
 }
 
