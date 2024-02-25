@@ -6,7 +6,7 @@ function getText() {
 }
 
 /**
- * @typedef {'word' | 'line' | 'char'} unit
+ * @typedef {'word' | 'line' | 'char' | 'max'} unit
  */
 
 /**
@@ -57,10 +57,17 @@ function countLines(string) {
   return string.split("\n").length;
 }
 
+/** @param {string} string */
+function getMaxLineLength(string) {
+  const lineLengths = string.split("\n").map((s) => s.length);
+  return Math.max(...lineLengths);
+}
+
 document.getElementById("textarea")?.addEventListener("input", () => {
   const text = getText();
 
   setCount("char", countChars(text));
   setCount("word", countWords(text));
   setCount("line", countLines(text));
+  setCount("max", getMaxLineLength(text));
 });
