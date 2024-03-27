@@ -78,18 +78,30 @@ function getMaxLineLength(string) {
 function setAllCounts() {
   const text = getText();
 
-  document.querySelector('meta[property="og:title"]')?.remove();
-  const meta = document.createElement("meta");
-  meta.setAttribute("property", "og:title");
-
   setCount("char", countChars(text));
   setCount("word", countWords(text));
   setCount("line", countLines(text));
   setCount("max", getMaxLineLength(text));
 
-  meta.setAttribute("content", `This text has ${countWords(text)} words`);
+  document
+    .querySelectorAll('meta[property^="og:"]')
+    .forEach((el) => el.remove());
 
-  document.head.appendChild(meta);
+  const title = document.createElement("meta");
+  title.setAttribute("property", "og:title");
+  title.content = `Count the length of ${text.length > 42 ? text.slice(0, 42) + "..." : text}`;
+
+  const description = document.createElement("meta");
+  description.setAttribute("property", "og:description");
+  description.content = [
+    `Characters: ${countChars(text)}`,
+    `Words: ${countWords(text)}`,
+    `Lines: ${countLines(text)}`,
+    `Longest line: ${getMaxLineLength(text)}`,
+  ].join("\n");
+
+  document.head.appendChild(title);
+  document.head.appendChild(description);
 }
 
 document.getElementById("textarea")?.addEventListener("input", () => {
