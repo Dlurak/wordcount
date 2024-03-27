@@ -6,6 +6,16 @@ function getText() {
 }
 
 /**
+ * @param {string} string
+ * @returns {string}
+ **/
+function capitalized(string) {
+  const firstLetter = string.charAt(0).toUpperCase();
+  const rest = string.slice(1);
+  return firstLetter + rest;
+}
+
+/**
  * @typedef {'word' | 'line' | 'char' | 'max'} unit
  */
 
@@ -20,6 +30,8 @@ function setCount(unit, amount) {
   const element = document.getElementById(`${unit}-count`);
 
   element.innerText = string;
+
+  return `${capitalized(unit)}: ${string}`;
 }
 
 /**
@@ -66,10 +78,18 @@ function getMaxLineLength(string) {
 function setAllCounts() {
   const text = getText();
 
+  document.querySelector('meta[property="og:title"]')?.remove();
+  const meta = document.createElement("meta");
+  meta.setAttribute("property", "og:title");
+
   setCount("char", countChars(text));
   setCount("word", countWords(text));
   setCount("line", countLines(text));
   setCount("max", getMaxLineLength(text));
+
+  meta.setAttribute("content", `This text has ${countWords(text)} words`);
+
+  document.head.appendChild(meta);
 }
 
 document.getElementById("textarea")?.addEventListener("input", () => {
