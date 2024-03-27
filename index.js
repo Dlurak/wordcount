@@ -63,11 +63,64 @@ function getMaxLineLength(string) {
   return Math.max(...lineLengths);
 }
 
-document.getElementById("textarea")?.addEventListener("input", () => {
+function setAllCounts() {
   const text = getText();
 
   setCount("char", countChars(text));
   setCount("word", countWords(text));
   setCount("line", countLines(text));
   setCount("max", getMaxLineLength(text));
+}
+
+document.getElementById("textarea")?.addEventListener("input", () => {
+  setAllCounts();
+});
+
+function applyUrl() {
+  const url = new URL(window.location.href);
+  const text = url.searchParams.get("text");
+  if (!text) return;
+
+  document.getElementById("textarea").value = text;
+  setAllCounts();
+}
+
+function setUrl() {
+  const text = getText();
+  const url = new URL(window.location.href);
+  url.searchParams.set("text", text);
+  return url.toString();
+}
+
+window.addEventListener("load", () => {
+  applyUrl();
+});
+
+/**
+ * @typedef {object} Options
+ * @property {number} timeout
+ */
+
+/**
+ * @param {string} message
+ * @param {Options} options
+ */
+function sendToast(message, options) {
+  const newToast = document.createElement("div");
+  const removeToast = () => newToast?.remove();
+
+  newToast.className = "toast";
+  newToast.innerText = message;
+  newToast.onclick = removeToast;
+
+  document.getElementById("toasts")?.appendChild(newToast);
+
+  setTimeout(removeToast, options.timeout);
+}
+
+const shareButton = document.getElementById("share-btn");
+shareButton?.addEventListener("click", () => {
+  const url = setUrl();
+  navigator.clipboard.writeText(url);
+  sendToast("URL copied to clipboard", { timeout: 2000 });
 });
